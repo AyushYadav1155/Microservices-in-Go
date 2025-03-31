@@ -1,0 +1,12 @@
+# ignore folder
+
+compose-files/db-data/*
+
+# files
+*.exe
+
+# builds
+
+logger-service/loggerServiceApp
+broker-service/brokerApp
+authentication-service/authApp
