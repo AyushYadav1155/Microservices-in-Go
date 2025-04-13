@@ -11,7 +11,8 @@ This application demonstrates how microservices can communicate with each other 
 - ✅ Broker Service - Central communication hub between services
 - ✅ Authentication Service - Handles user authentication
 - ✅ Logger Service - Records system events and activities
-- ⏳ Mail Service - Manages email communications
+- ✅ Mail Service - Manages email communications
+- ⏳ RabbitMQ - Message broker for service communication
 - ⏳ gRPC Logger - Demonstrates gRPC communication
 
 ### Architecture
@@ -19,6 +20,28 @@ This application demonstrates how microservices can communicate with each other 
 - **Frontend**: Simple gohtml interface with buttons to test each service
 - **Backend**: RESTful API communication between services
 - **Deployment**: Docker containerization for all services
+
+## Service Details
+
+### Broker Service
+- Acts as the central entry point for all requests
+- Determines which service to forward requests to based on payload data
+- Exposed on host machine at port 8086
+
+### Authentication Service
+- Authenticates users based on user ID and password
+- Uses Postgres (postgres:14.2) as database
+- Securely handles credential verification
+
+### Logger Service
+- Responsible for logging various communications within the microservices architecture
+- Uses MongoDB (mongo:4.2.16-bionic) as database
+- Provides centralized logging functionality
+
+### Mail Service
+- Sends emails to specified email addresses
+- Utilizes Mailhog for email testing and development
+- Mailhog interface is accessible at port 8025 on the host machine
 
 ## Service Interactions
 
@@ -34,8 +57,9 @@ The Broker Service acts as the central communication hub:
 
 | Service | Database |
 |---------|----------|
-| Authentication | PostgreSQL |
-| Logger | MongoDB |
+| Authentication | PostgreSQL (14.2) |
+| Logger | MongoDB (4.2.16-bionic) |
+| Mail | Mailhog |
 
 ## Getting Started
 
@@ -86,6 +110,13 @@ make start
    set GOARCH=amd64
    set CGO_ENABLED=0
    go build -o loggerServiceApp ./cmd/api
+   
+   # Build Mail Service
+   cd ../mail-service
+   set GOOS=linux
+   set GOARCH=amd64
+   set CGO_ENABLED=0
+   go build -o mailerApp ./cmd/api
    ```
 
 2. **Start the services with Docker Compose**:
@@ -109,8 +140,9 @@ make start
 
 ## Development Status
 
-- **Completed**: Broker, Authentication, and Logger services
-- **In Progress**: Mail Service and gRPC Logger
+- **Completed**: Broker, Authentication, Logger, and Mail services
+- **In Progress**: RabbitMQ integration
+- **Planned**: gRPC Logger
 
 ## Technologies Used
 
@@ -118,4 +150,5 @@ make start
 - Docker
 - PostgreSQL
 - MongoDB
+- Mailhog
 - RESTful API
